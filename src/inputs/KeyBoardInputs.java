@@ -8,11 +8,12 @@ import java.awt.event.KeyListener;
 import static utilz.Constants.Directions.*;
 
 public class KeyBoardInputs implements KeyListener {
-    private GamePanel gamePanel;
-    private Player player;
+    private final GamePanel gamePanel;
+    private final Player player;
 
-    public KeyBoardInputs(GamePanel gamePanel) {
+    public KeyBoardInputs(GamePanel gamePanel, Player player) {
         this.gamePanel = gamePanel;
+        this.player = player;
     }
 
     @Override

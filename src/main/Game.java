@@ -11,11 +11,10 @@ public class Game implements Runnable {
     private Player player;
 
     public Game() {
-
-        gamePanel = new GamePanel();
+        initClasses();
+        gamePanel = new GamePanel(player);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
-        initClasses();
         startLoop();
 
     }
@@ -32,7 +31,9 @@ public class Game implements Runnable {
     public void update(){
         player.update();
     }
-    public void render(){}
+    public void render(){
+
+    }
 
 
     @Override

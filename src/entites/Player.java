@@ -23,8 +23,9 @@ public class Player extends Entity {
     }
 
     public void update() {
-        updateAnimationTick();
         setAnimation();
+        updateAnimationTick();
+
         updateMoving();
 
     }

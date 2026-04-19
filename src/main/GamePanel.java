@@ -1,18 +1,12 @@
 package main;
 
+import entites.Player;
 import inputs.KeyBoardInputs;
 import inputs.MouseInputs;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
-
-import static utilz.Constants.PlayerConstants.*;
-import static utilz.Constants.Directions.*;
 
 public class GamePanel extends JPanel {
     private float xDelta = 100;
@@ -22,14 +16,16 @@ public class GamePanel extends JPanel {
     private MouseInputs mouseInputs;
     private Color color = new Color(50, 49, 180);
     private Random rd;
+    private final Player player;
 
 
 
-    public GamePanel() {
+    public GamePanel(Player player) {
+        this.player = player;
         rd = new Random();
         setPanelSize();
         mouseInputs = new MouseInputs(this);
-        addKeyListener(new KeyBoardInputs(this));
+        addKeyListener(new KeyBoardInputs(this, player));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
 
@@ -57,9 +53,7 @@ public class GamePanel extends JPanel {
 //        g.setColor(color);
 //        g.fillRect((int) xDelta, (int) yDelta, 200, 50);
 //        repaint();
-        //subImg = img.getSubimage(1*64,8*40,64,40);
-
-       // g.drawImage(animations[playerAction][aniIndex], (int) xDelta, (int) yDelta, 240, 160, null);
+        player.render(g);
 
     }
 
