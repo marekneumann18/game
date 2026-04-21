@@ -1,18 +1,30 @@
 package main;
 
 import entites.Player;
+import levels.LevelManager;
+
+import java.awt.*;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;
     private GamePanel gamePanel;
     private Thread gameThread;
     private final int FPS_SET = 120;
-    private final int UPS_SET = 220;
+    private final int UPS_SET = 200;
     private Player player;
+    private LevelManager levelManager;
+    public final static int TILES_DEFAULT_SIZE = 32;
+    public final static float SCALE = 1.5f;
+    public final static int TILES_IN_WIDTH = 26;
+    public final static int TILES_IN_HEIGHT = 14;
+    public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
+    public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
+    public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
+
 
     public Game() {
         initClasses();
-        gamePanel = new GamePanel(player);
+        gamePanel = new GamePanel(this, player);
         gameWindow = new GameWindow(gamePanel);
         gamePanel.requestFocus();
         startLoop();
@@ -20,7 +32,8 @@ public class Game implements Runnable {
     }
 
     private void initClasses() {
-        player = new Player(200,200);
+        player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
+        levelManager = new LevelManager(this);
     }
 
     public void startLoop() {
@@ -28,10 +41,16 @@ public class Game implements Runnable {
         gameThread.start();
 
     }
-    public void update(){
-        player.update();
+
+    public void update() {
+        player.update(); levelManager.update();
+
+
     }
-    public void render(){
+
+    public void render(Graphics g) {
+        levelManager.draw(g);
+        player.render(g);
 
     }
 
@@ -54,13 +73,14 @@ public class Game implements Runnable {
             long currentTime = System.nanoTime();
 
             deltaU += (currentTime - previopusTime) / timePerUpdate;
-            deltaF+= (currentTime - previopusTime) / timePerFrame;
-            previopusTime = currentTime ;
+            deltaF += (currentTime - previopusTime) / timePerFrame;
+            previopusTime = currentTime;
             if (deltaU >= 1) {
                 update();
                 updates++;
                 deltaU--;
-            }if (deltaF >= 1) {
+            }
+            if (deltaF >= 1) {
                 gamePanel.repaint();
                 frames++;
                 deltaF--;
@@ -76,10 +96,18 @@ public class Game implements Runnable {
                 lastCheck = System.currentTimeMillis();
                 System.out.println("FPS: " + frames + "| UPS: " + updates);
                 frames = 0;
-                updates= 0;
+                updates = 0;
             }
 
         }
 
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void windowFocusLost() {
+        player.resetDirBooleans();
     }
 }

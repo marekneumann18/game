@@ -8,6 +8,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
+import static main.Game.GAME_HEIGHT;
+import static main.Game.GAME_WIDTH;
+
 public class GamePanel extends JPanel {
     private float xDelta = 100;
     private float yDelta = 100;
@@ -17,15 +20,17 @@ public class GamePanel extends JPanel {
     private Color color = new Color(50, 49, 180);
     private Random rd;
     private final Player player;
+    private Game game;
 
 
 
-    public GamePanel(Player player) {
+    public GamePanel(Game game,Player player) {
         this.player = player;
+        this.game = game;
         rd = new Random();
         setPanelSize();
         mouseInputs = new MouseInputs(this);
-        addKeyListener(new KeyBoardInputs(this, player));
+        addKeyListener(new KeyBoardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
 
@@ -36,10 +41,11 @@ public class GamePanel extends JPanel {
 
 
     private void setPanelSize() {
-        Dimension size = new Dimension(1200, 800);
-        setMinimumSize(size);
+        Dimension size = new Dimension(GAME_WIDTH,GAME_HEIGHT);
+
         setPreferredSize(size);
-        setMaximumSize(size);
+
+
 
     }
 
@@ -53,7 +59,7 @@ public class GamePanel extends JPanel {
 //        g.setColor(color);
 //        g.fillRect((int) xDelta, (int) yDelta, 200, 50);
 //        repaint();
-        player.render(g);
+        game.render(g);
 
     }
 
@@ -78,5 +84,9 @@ public class GamePanel extends JPanel {
         int b = rd.nextInt(255);
         return new Color(r, g, b);
 
+    }
+
+    public Game getGame() {
+        return game;
     }
 }

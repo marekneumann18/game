@@ -5,15 +5,16 @@ import main.GamePanel;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+
 import static utilz.Constants.Directions.*;
 
 public class KeyBoardInputs implements KeyListener {
     private final GamePanel gamePanel;
-    private final Player player;
 
-    public KeyBoardInputs(GamePanel gamePanel, Player player) {
+
+    public KeyBoardInputs(GamePanel gamePanel) {
         this.gamePanel = gamePanel;
-        this.player = player;
+
     }
 
     @Override
@@ -26,20 +27,16 @@ public class KeyBoardInputs implements KeyListener {
 
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
-
-                player.setDirection(UP);
-                break;
-            case KeyEvent.VK_A:
-
-              player.setDirection(LEFT);
+                gamePanel.getGame().getPlayer().setUp(true);
                 break;
             case KeyEvent.VK_S:
-
-               player.setDirection(DOWN);
+                gamePanel.getGame().getPlayer().setDown(true);
+                break;
+            case KeyEvent.VK_A:
+                gamePanel.getGame().getPlayer().setLeft(true);
                 break;
             case KeyEvent.VK_D:
-
-                player.setDirection(RIGHT);
+                gamePanel.getGame().getPlayer().setRight(true);
                 break;
         }
 
@@ -48,8 +45,17 @@ public class KeyBoardInputs implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         switch (e.getKeyCode()) {
-            case KeyEvent.VK_W, KeyEvent.VK_S, KeyEvent.VK_A, KeyEvent.VK_D:
-                player.setMoving(false);
+            case KeyEvent.VK_W:
+                gamePanel.getGame().getPlayer().setUp(false);
+                break;
+            case KeyEvent.VK_S:
+                gamePanel.getGame().getPlayer().setDown(false);
+                break;
+            case KeyEvent.VK_A:
+                gamePanel.getGame().getPlayer().setLeft(false);
+                break;
+            case KeyEvent.VK_D:
+                gamePanel.getGame().getPlayer().setRight(false);
                 break;
         }
 

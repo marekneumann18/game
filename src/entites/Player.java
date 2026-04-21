@@ -1,32 +1,35 @@
 package entites;
 
+import utilz.LoadSave;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static utilz.Constants.Directions.*;
-import static utilz.Constants.Directions.DOWN;
 import static utilz.Constants.PlayerConstants.*;
 
 public class Player extends Entity {
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 15;
     private int playerAction = IDLE;
-    private int playerDir = -1;
-    private boolean moving;
+    private boolean left, right, up, down;
+    private float playerSpeed = 2.0f;
+    private boolean moving = false, attacking = false;
 
-    public Player(float x, float y) {
-        super(x, y);
+
+    public Player(float x, float y,int width,int height) {
+        super(x, y,width,height);
         loadAnimations();
     }
 
     public void update() {
-        setAnimation();
-        updateAnimationTick();
-
         updateMoving();
+        updateAnimationTick();
+        setAnimation();
+
+
 
     }
 
@@ -34,26 +37,30 @@ public class Player extends Entity {
         g.drawImage(animations[playerAction][aniIndex], (int) x, (int) y, 240, 160, null);
 
     }
-    public void setDirection(int direction) {
-        this.playerDir = direction;
-        moving = true;
 
-
-    }
-
-    public void setMoving(boolean moving) {
-        this.moving = moving;
-
-    }
 
     private void setAnimation() {
+        int startAni = playerAction;
         if (moving) {
             playerAction = RUNNING;
         } else {
             playerAction = IDLE;
         }
+        if (attacking) {
+            playerAction = ATTACK_1;
+
+        }
+        if (startAni != playerAction) {
+            resetAniTick();
+        }
 
     }
+
+    private void resetAniTick() {
+        aniTick = 0;
+        aniIndex = 0;
+    }
+
     private void updateAnimationTick() {
         aniTick++;
         if (aniTick >= aniSpeed) {
@@ -61,48 +68,91 @@ public class Player extends Entity {
             aniIndex++;
             if (aniIndex >= GetSpriteAmount(playerAction)) {
                 aniIndex = 0;
-
+                attacking = false;
             }
         }
 
     }
+
     private void updateMoving() {
-        if (moving) {
-            switch (playerDir) {
-                case LEFT -> x -= 5;
-                case UP -> y -= 5;
-                case RIGHT -> x += 5;
-                case DOWN -> y += 5;
-            }
+        moving = false;
+        if (left && !right) {
+            x -= playerSpeed;
+            moving = true;
+
+        } else if (right && !left) {
+            x += playerSpeed;
+            moving = true;
         }
+
+        if (up && !down) {
+            y -= playerSpeed;
+            moving = true;
+        } else if (down && !up) {
+            y += playerSpeed;
+            moving = true;
+        }
+
+
     }
-
-
 
 
     private void loadAnimations() {
-        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
-        try {
-            BufferedImage img = ImageIO.read(is);
-            animations = new BufferedImage[9][6];
-            for (int j = 0; j < animations.length; j++) {
-                for (int i = 0; i < animations[j].length; i++) {
-                    animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
+        BufferedImage img = LoadSave.GetSpriteAtlas(LoadSave.PLAYER_ATLAS);
 
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("špatne img");
-        } finally {
-            try {
-                is.close();
-            } catch (IOException f) {
-                System.out.println("nazaveno");
+        animations = new BufferedImage[9][6];
+        for (int j = 0; j < animations.length; j++) {
+            for (int i = 0; i < animations[j].length; i++) {
+                animations[j][i] = img.getSubimage(i * 64, j * 40, 64, 40);
 
             }
-
         }
+
 
     }
 
+    public boolean isLeft() {
+        return left;
+    }
+
+    public boolean isRight() {
+        return right;
+    }
+
+    public boolean isUp() {
+        return up;
+    }
+
+    public boolean isDown() {
+        return down;
+    }
+
+    public void setLeft(boolean left) {
+        this.left = left;
+    }
+
+    public void setRight(boolean right) {
+        this.right = right;
+    }
+
+    public void setUp(boolean up) {
+        this.up = up;
+    }
+
+    public void setDown(boolean down) {
+        this.down = down;
+    }
+
+    public void setAttacking(boolean attacking) {
+        this.attacking = attacking;
+    }
+
+    public void resetDirBooleans() {
+        left = false;
+        right = false;
+        up = false;
+        down = false;
+
+
+    }
 }
