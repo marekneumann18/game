@@ -44,4 +44,23 @@ public class Help {
             // Left
             return currentTile * Game.TILES_SIZE;
     }
+    public static float getEntityYPosUnderFloor(Rectangle2D.Float hitbox, float airSpeed){
+        int currentTile = (int) (hitbox.y / Game.TILES_SIZE);
+        if (airSpeed > 0) {
+            // Falling - touching floor
+            int tileYPos = currentTile * Game.TILES_SIZE;
+            int yOffset = (int) (Game.TILES_SIZE - hitbox.height);
+            return tileYPos + yOffset - 1;
+        } else
+            // Jumping
+            return currentTile * Game.TILES_SIZE;
+
+    }
+//    public static boolean IsOnFloor(Rectangle2D.Float hitbox,int[][] lvlData){
+//if (!IsSolid(hitbox.x, hitbox.y + hitbox.height, lvlData)){
+//    if (!IsSolid(hitbox.x + hitbox.width, hitbox.y , lvlData)){
+//
+//    }
+//}
+//    }
 }
