@@ -44,7 +44,8 @@ public class Help {
             // Left
             return currentTile * Game.TILES_SIZE;
     }
-    public static float getEntityYPosUnderFloor(Rectangle2D.Float hitbox, float airSpeed){
+
+    public static float getEntityYPosUnderFloor(Rectangle2D.Float hitbox, float airSpeed) {
         int currentTile = (int) (hitbox.y / Game.TILES_SIZE);
         if (airSpeed > 0) {
             // Falling - touching floor
@@ -56,11 +57,14 @@ public class Help {
             return currentTile * Game.TILES_SIZE;
 
     }
-//    public static boolean IsOnFloor(Rectangle2D.Float hitbox,int[][] lvlData){
-//if (!IsSolid(hitbox.x, hitbox.y + hitbox.height, lvlData)){
-//    if (!IsSolid(hitbox.x + hitbox.width, hitbox.y , lvlData)){
-//
-//    }
-//}
-//    }
+
+    public static boolean IsOnFloor(Rectangle2D.Float hitbox, int[][] lvlData) {
+        if (!IsSolid(hitbox.x, hitbox.y + hitbox.height + 1, lvlData)) {
+            if (!IsSolid(hitbox.x + hitbox.width, hitbox.y + 1, lvlData)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }

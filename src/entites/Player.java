@@ -35,7 +35,8 @@ public class Player extends Entity {
     public Player(float x, float y, int width, int height) {
         super(x, y, width, height);
         loadAnimations();
-        initHitbox(x, y, 20 * Game.SCALE, 28 * Game.SCALE);
+        initHitbox(x, y, 20 * Game.SCALE, 27 * Game.SCALE);
+
     }
 
     public void update() {
@@ -58,6 +59,12 @@ public class Player extends Entity {
             playerAction = RUNNING;
         } else {
             playerAction = IDLE;
+        }
+        if (inAir) {
+            if (airSpeed < 0)
+                playerAction = JUMP;
+            else
+                playerAction = FALLING;
         }
         if (attacking) {
             playerAction = ATTACK_1;
@@ -89,7 +96,7 @@ public class Player extends Entity {
 
     private void updateMoving() {
         moving = false;
-        if (jump){
+        if (jump) {
             jump();
         }
         if (!left && !right && !inAir)
@@ -101,8 +108,10 @@ public class Player extends Entity {
             xSpeed -= playerSpeed;
         else if (right)
             xSpeed += playerSpeed;
+        if (!inAir) {
+            if (!IsOnFloor(hitbox, lvlData)) inAir = true;
+        }
 
-       // if (!IsOnFloor(hitbox,lvlData))
 
         if (inAir) {
             if (canMoveHere(hitbox.x, hitbox.y + airSpeed, hitbox.width, hitbox.height, lvlData)) {
@@ -124,9 +133,10 @@ public class Player extends Entity {
         }
         moving = true;
     }
-    private void jump(){
-        if (inAir){
-            return ;
+
+    private void jump() {
+        if (inAir) {
+            return;
         }
         inAir = true;
         airSpeed = jumpSpeed;
@@ -151,6 +161,8 @@ public class Player extends Entity {
 
     public void loadLvlData(int[][] lvlData) {
         this.lvlData = lvlData;
+        if (!IsOnFloor(hitbox,lvlData))
+            inAir = true;
     }
 
 
@@ -171,6 +183,7 @@ public class Player extends Entity {
     public void setJump(boolean jump) {
         this.jump = jump;
     }
+
     public boolean isLeft() {
         return left;
     }

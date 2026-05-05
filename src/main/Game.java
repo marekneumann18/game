@@ -1,6 +1,7 @@
 package main;
 
 import entites.Player;
+import gamestates.Gamestate;
 import levels.LevelManager;
 
 import java.awt.*;
@@ -31,7 +32,8 @@ public class Game implements Runnable {
 
     }
 
-    private void initClasses() {levelManager = new LevelManager(this);
+    private void initClasses() {
+        levelManager = new LevelManager(this);
         player = new Player(200, 200, (int) (64 * SCALE), (int) (40 * SCALE));
         player.loadLvlData(levelManager.getCurrentLevel().getLvlData());
     }
@@ -43,15 +45,31 @@ public class Game implements Runnable {
     }
 
     public void update() {
-        player.update();
-        levelManager.update();
+
+        switch (Gamestate.state){
+            case PLAYING -> {
+                player.update();
+                levelManager.update();
+            }
+            case MENU -> {
+
+            }
+
+        }
 
 
     }
 
     public void render(Graphics g) {
-        levelManager.draw(g);
-        player.render(g);
+        switch (Gamestate.state){
+            case PLAYING -> {
+                levelManager.draw(g);
+                player.render(g);
+            }
+            case MENU -> {
+            }
+        }
+
 
     }
 
@@ -104,9 +122,7 @@ public class Game implements Runnable {
 
     }
 
-    public Player getPlayer() {
-        return player;
-    }
+
 
     public void windowFocusLost() {
         player.resetDirBooleans();
