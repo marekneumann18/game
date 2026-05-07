@@ -13,6 +13,9 @@ public class MenuButton {
     private Gamestate gamestate;
     private BufferedImage[] images;
     private int xOffCenter = B_WIDTH / 2;
+    private boolean mouseOver, mousePressed;
+    private Rectangle bounds;
+
 
     public MenuButton(int xPos, int yPos, int row, Gamestate gamestate) {
         this.xPos = xPos;
@@ -20,6 +23,11 @@ public class MenuButton {
         this.row = row;
         this.gamestate = gamestate;
         loadImg();
+        initBounds();
+    }
+
+    private void initBounds() {
+        bounds = new Rectangle(xPos - xOffCenter, yPos, B_WIDTH, B_HEIGHT);
     }
 
     private void loadImg() {
@@ -39,5 +47,38 @@ public class MenuButton {
 
     public void update() {
         index = 0;
+        if (mouseOver)
+            index = 1;
+        if (mousePressed)
+            index = 2;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public boolean isMouseOver() {
+        return mouseOver;
+    }
+
+    public boolean isMousePressed() {
+        return mousePressed;
+    }
+
+    public void apllyGameState() {
+        Gamestate.state = gamestate;
+    }
+
+    public void setMouseOver(boolean mouseOver) {
+        this.mouseOver = mouseOver;
+    }
+
+    public void setMousePressed(boolean mousePressed) {
+        this.mousePressed = mousePressed;
+    }
+
+    public void resetBools() {
+        mousePressed = false;
+        mouseOver = false;
     }
 }
