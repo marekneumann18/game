@@ -1,5 +1,8 @@
-import main.Game;
-void main() {
-new Game();
+package main;
 
+import main.Game;
+public class Main {
+    public static void main(String[] args) {
+        new Game();
+    }
 }

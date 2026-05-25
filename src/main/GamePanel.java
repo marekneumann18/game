@@ -25,6 +25,7 @@ public class GamePanel extends JPanel {
 
 
     public GamePanel(Game game,Player player) {
+        setFocusable(true);
         this.player = player;
         this.game = game;
         rd = new Random();

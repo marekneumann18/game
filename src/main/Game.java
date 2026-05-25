@@ -7,6 +7,7 @@ import gamestates.Playing;
 import levels.LevelManager;
 
 import java.awt.*;
+import java.util.Timer;
 
 public class Game implements Runnable {
     private GameWindow gameWindow;
@@ -62,6 +63,7 @@ public class Game implements Runnable {
 
 
     }
+
 
     public void render(Graphics g) {
         switch (Gamestate.state) {
